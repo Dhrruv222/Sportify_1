@@ -1,11 +1,13 @@
 // server/prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  //Missing URL of the database
+  
 }
 
 enum UserRole {
@@ -23,5 +25,135 @@ model User {
   email     String   @unique
   password  String
   role      UserRole @default(FAN)
+  profilePhoto String?
+  coverPhoto String?
   createdAt DateTime @default(now())
+
+  //1 to 1 relationships (Profiles)
+  player  Player?
+  club    Club?
+  agent   Agent?
+  scout   Scout?
+  coach   Coach?
+  fan     Fan?
+  company Company?
+
+  //Interaction Relationships
+  followers    Follows[] @relation("UserFollowers")
+  following    Follows[] @relation("UserFollowing")
+  messagesSent Message[] @relation("MessagesSent")
+  messagesRecv Message[] @relation("MessagesReceived")
+  savedPlayers SavedPlayer[]
+}
+
+// 2. Profiles ( 1:1 -> User)
+model Player {
+  id           String   @id @default(uuid())
+  //User FK
+  userId       String   @unique 
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Agent FK (M:1)
+  agentId      String?
+  agent        Agent?   @relation(fields: [agentId], references: [id])
+
+  firstName    String
+  lastName     String
+  position     String
+  dominantFoot String
+  height       Int
+  weight       Int
+  skills       Json
+  playingStyle String
+  location     String
+
+  savedBy      SavedPlayer[]
+}
+
+model Club {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name        String
+  description String?
+  isVerified  Boolean  @default(false)
+
+  //A club can have many coaches and scouts
+  coaches     Coach[]
+  scouts      Scout[]
+}
+
+model Agent {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  agencyName String
+  players    Player[]
+}
+
+model Scout {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  associatedClubId String?
+  club             Club?    @relation(fields: [associatedClubId], references: [id])
+}
+
+model Coach {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  currentClubId String?
+  club          Club?    @relation(fields: [currentClubId], references: [id])
+}
+
+model Fan {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Company {
+  id       String @id @default(uuid())
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name     String
+  industry String?
+}
+
+// Pivots
+model Follows {
+  id         String   @id @default(uuid())
+  followerId String
+  followedId String
+  createdAt  DateTime @default(now())
+
+  follower   User @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  followed   User @relation("UserFollowers", fields: [followedId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+
+  sender     User @relation("MessagesSent", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User @relation("MessagesReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+model SavedPlayer {
+  id        String   @id @default(uuid())
+  userId    String
+  playerId  String
+  createdAt DateTime @default(now())
+
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  player    Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 }
