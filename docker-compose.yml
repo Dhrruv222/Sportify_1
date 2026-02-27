@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: sportify
       POSTGRES_DB: sportify
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - sportify_pgdata:/var/lib/postgresql/data
 
