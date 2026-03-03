@@ -27,8 +27,23 @@ async function getNewsById(req, res) {
   }
 }
 
+async function ingestNews(req, res) {
+  try {
+    const requiredKey = process.env.INTERNAL_API_KEY;
+    if (requiredKey && req.headers['x-internal-api-key'] !== requiredKey) {
+      return res.status(401).json({ success: false, error: 'Invalid internal API key' });
+    }
+
+    const result = await newsService.ingestNews(req.body);
+    return res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+}
+
 module.exports = {
   listNews,
   createNews,
   getNewsById,
+  ingestNews,
 };

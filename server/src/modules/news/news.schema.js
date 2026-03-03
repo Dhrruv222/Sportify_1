@@ -16,6 +16,11 @@ const createNewsSchema = z.object({
   publishedAt: z.coerce.date().optional(),
 });
 
+const ingestNewsSchema = z.object({
+  locale: z.string().min(2).max(10).default('en'),
+  limit: z.coerce.number().int().min(1).max(20).default(5),
+});
+
 const newsIdParamSchema = z.object({
   id: z.string().min(1),
 });
@@ -23,5 +28,6 @@ const newsIdParamSchema = z.object({
 module.exports = {
   listNewsQuerySchema,
   createNewsSchema,
+  ingestNewsSchema,
   newsIdParamSchema,
 };

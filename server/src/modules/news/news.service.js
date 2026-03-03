@@ -1,4 +1,5 @@
 const { prisma } = require('../../lib/prisma');
+const { fetchNewsFeed } = require('../../services/integrations');
 
 async function listNews({ locale, page, limit }) {
   const where = {
@@ -47,8 +48,55 @@ async function getNewsById(id) {
   return article;
 }
 
+async function ingestNews({ locale, limit }) {
+  const feedItems = await fetchNewsFeed({ locale, limit });
+  let inserted = 0;
+  let skipped = 0;
+
+  for (const item of feedItems) {
+    const sourceUrl = item.sourceUrl || null;
+    if (sourceUrl) {
+      const existing = await prisma.newsArticle.findFirst({
+        where: {
+          sourceUrl,
+          locale: item.locale || locale,
+        },
+        select: { id: true },
+      });
+
+      if (existing) {
+        skipped += 1;
+        continue;
+      }
+    }
+
+    await prisma.newsArticle.create({
+      data: {
+        title: item.title,
+        summary: item.summary,
+        content: item.content,
+        source: item.source,
+        sourceUrl,
+        locale: item.locale || locale,
+        publishedAt: item.publishedAt ? new Date(item.publishedAt) : new Date(),
+        isPublished: true,
+      },
+    });
+
+    inserted += 1;
+  }
+
+  return {
+    locale,
+    requested: feedItems.length,
+    inserted,
+    skipped,
+  };
+}
+
 module.exports = {
   listNews,
   createNews,
   getNewsById,
+  ingestNews,
 };
