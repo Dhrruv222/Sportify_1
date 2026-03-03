@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 //Auth route
 const authRoutes = require('./modules/auth/auth.routes');
 const fitpassRoutes = require('./modules/fitpass/fitpass.routes');
+const companyRoutes = require('./modules/company/company.routes');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 // Routes API
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/fitpass', fitpassRoutes);
+app.use('/api/v1/company', companyRoutes);
 
 app.get('/api/health', (req, res) => {
     res.status(200).json({

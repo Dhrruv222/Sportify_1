@@ -48,6 +48,7 @@ model User {
   likes        Like[]
   comments     Comment[]
   fitpassSubscriptions FitpassSubscription[]
+  companyMemberships CompanyEmployee[]
   
 }
 
@@ -130,6 +131,7 @@ model Company {
   
   name     String
   industry String?
+  employees CompanyEmployee[]
 }
 
 //Videos
@@ -247,6 +249,7 @@ model FitpassPlan {
   updatedAt     DateTime @updatedAt
 
   subscriptions FitpassSubscription[]
+  companyEmployees CompanyEmployee[]
 }
 
 model FitpassSubscription {
@@ -280,4 +283,21 @@ model FitpassCheckin {
 
   @@index([subscriptionId, checkedInAt])
   @@index([partnerId, checkedInAt])
+}
+
+model CompanyEmployee {
+  id        String   @id @default(uuid())
+  companyId String
+  userId    String
+  planId    String
+  createdAt DateTime @default(now())
+
+  company   Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan      FitpassPlan @relation(fields: [planId], references: [id])
+
+  @@unique([companyId, userId])
+  @@index([companyId])
+  @@index([userId])
+  @@index([planId])
 }
