@@ -38,7 +38,7 @@ async function computeScoutScore(playerId, statsObj) {
     score: result.score,
     breakdown: {
       pace: result.breakdown.pace,
-      tech: result.breakdown.technical,
+      technical: result.breakdown.technical,
       physical: result.breakdown.physical,
       mental: result.breakdown.mental,
     },
