@@ -10,6 +10,7 @@ const passport = require('passport');
 const authRoutes = require('./modules/auth/auth.routes');
 const fitpassRoutes = require('./modules/fitpass/fitpass.routes');
 const companyRoutes = require('./modules/company/company.routes');
+const newsRoutes = require('./modules/news/news.routes');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(passport.initialize());
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/fitpass', fitpassRoutes);
 app.use('/api/v1/company', companyRoutes);
+app.use('/api/v1/news', newsRoutes);
 
 app.get('/api/health', (req, res) => {
     res.status(200).json({

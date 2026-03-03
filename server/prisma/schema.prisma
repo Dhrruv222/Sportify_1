@@ -301,3 +301,20 @@ model CompanyEmployee {
   @@index([userId])
   @@index([planId])
 }
+
+model NewsArticle {
+  id          String   @id @default(uuid())
+  title       String
+  summary     String?
+  content     String?  @db.Text
+  source      String?
+  sourceUrl   String?
+  locale      String   @default("en")
+  publishedAt DateTime @default(now())
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([locale, publishedAt])
+  @@index([isPublished, publishedAt])
+}
