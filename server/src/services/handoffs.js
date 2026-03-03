@@ -1,4 +1,8 @@
-const { getPresignedUploadUrl: getUploadUrlFromMedia, sendEmail: sendEmailFromProvider } = require('./integrations');
+const {
+  getPresignedUploadUrl: getUploadUrlFromMedia,
+  sendEmail: sendEmailFromProvider,
+  computeScoutScoreFromAI,
+} = require('./integrations');
 
 async function getPresignedUploadUrl(userId, fileType) {
   return getUploadUrlFromMedia(userId, fileType);
@@ -28,14 +32,15 @@ async function generateQRCode(subscriptionId) {
 }
 
 async function computeScoutScore(playerId, statsObj) {
-  void playerId;
-  void statsObj;
+  const result = await computeScoutScoreFromAI({ playerId, statsObj });
 
   return {
-    score: 75,
+    score: result.score,
     breakdown: {
-      pace: 80,
-      tech: 70,
+      pace: result.breakdown.pace,
+      tech: result.breakdown.technical,
+      physical: result.breakdown.physical,
+      mental: result.breakdown.mental,
     },
   };
 }
