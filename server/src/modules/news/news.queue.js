@@ -65,6 +65,63 @@ async function enqueueNewsIngestion(payload) {
   };
 }
 
+async function getNewsQueueStatus() {
+  if (!isQueueEnabled()) {
+    return {
+      enabled: false,
+      mode: 'inline',
+      queueName: getQueueName(),
+      reason: 'REDIS_URL is not configured',
+    };
+  }
+
+  const queue = getQueue();
+  const counts = await queue.getJobCounts('waiting', 'active', 'completed', 'failed', 'delayed', 'paused');
+
+  return {
+    enabled: true,
+    mode: 'bullmq',
+    queueName: getQueueName(),
+    counts,
+  };
+}
+
+async function retryFailedNewsJobs({ limit = 20 } = {}) {
+  if (!isQueueEnabled()) {
+    return {
+      enabled: false,
+      mode: 'inline',
+      requested: limit,
+      retried: 0,
+      reason: 'REDIS_URL is not configured',
+    };
+  }
+
+  const queue = getQueue();
+  const safeLimit = Math.max(1, Math.min(Number(limit) || 20, 100));
+  const failedJobs = await queue.getJobs(['failed'], 0, safeLimit - 1, false);
+  let retried = 0;
+  let retryFailed = 0;
+
+  for (const job of failedJobs) {
+    try {
+      await job.retry();
+      retried += 1;
+    } catch {
+      retryFailed += 1;
+    }
+  }
+
+  return {
+    enabled: true,
+    mode: 'bullmq',
+    requested: safeLimit,
+    inspected: failedJobs.length,
+    retried,
+    retryFailed,
+  };
+}
+
 function startNewsIngestionWorker() {
   if (!isQueueEnabled() || workerInstance) {
     return;
@@ -87,5 +144,7 @@ function startNewsIngestionWorker() {
 
 module.exports = {
   enqueueNewsIngestion,
+  getNewsQueueStatus,
+  retryFailedNewsJobs,
   startNewsIngestionWorker,
 };

@@ -23,6 +23,10 @@ const ingestNewsSchema = z.object({
 
 const enqueueNewsSchema = ingestNewsSchema;
 
+const retryFailedJobsSchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+
 const newsIdParamSchema = z.object({
   id: z.string().min(1),
 });
@@ -32,5 +36,6 @@ module.exports = {
   createNewsSchema,
   ingestNewsSchema,
   enqueueNewsSchema,
+  retryFailedJobsSchema,
   newsIdParamSchema,
 };

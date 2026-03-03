@@ -1,5 +1,9 @@
 const newsService = require('./news.service');
-const { enqueueNewsIngestion } = require('./news.queue');
+const {
+  enqueueNewsIngestion,
+  getNewsQueueStatus,
+  retryFailedNewsJobs,
+} = require('./news.queue');
 
 async function listNews(req, res) {
   try {
@@ -46,10 +50,30 @@ async function enqueueIngestNews(req, res) {
   }
 }
 
+async function queueStatus(req, res) {
+  try {
+    const result = await getNewsQueueStatus();
+    return res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+}
+
+async function retryFailedQueueJobs(req, res) {
+  try {
+    const result = await retryFailedNewsJobs(req.body);
+    return res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+}
+
 module.exports = {
   listNews,
   createNews,
   getNewsById,
   ingestNews,
   enqueueIngestNews,
+  queueStatus,
+  retryFailedQueueJobs,
 };
