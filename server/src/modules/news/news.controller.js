@@ -1,4 +1,5 @@
 const newsService = require('./news.service');
+const { enqueueNewsIngestion } = require('./news.queue');
 
 async function listNews(req, res) {
   try {
@@ -36,9 +37,19 @@ async function ingestNews(req, res) {
   }
 }
 
+async function enqueueIngestNews(req, res) {
+  try {
+    const result = await enqueueNewsIngestion(req.body);
+    return res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+}
+
 module.exports = {
   listNews,
   createNews,
   getNewsById,
   ingestNews,
+  enqueueIngestNews,
 };

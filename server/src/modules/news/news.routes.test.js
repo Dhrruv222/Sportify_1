@@ -48,3 +48,53 @@ test('POST /api/v1/news/internal/ingest requires internal API key when configure
     }
   }
 });
+
+test('POST /api/v1/news/internal/enqueue runs in inline mode without REDIS_URL', async () => {
+  const previousRedisUrl = process.env.REDIS_URL;
+  const previousKey = process.env.INTERNAL_API_KEY;
+  delete process.env.REDIS_URL;
+  delete process.env.INTERNAL_API_KEY;
+
+  try {
+    const response = await request(app)
+      .post('/api/v1/news/internal/enqueue')
+      .send({ locale: 'en', limit: 1 });
+
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.body.success, true);
+    assert.equal(response.body.data.mode, 'inline');
+    assert.equal(response.body.data.accepted, true);
+  } finally {
+    if (previousRedisUrl === undefined) {
+      delete process.env.REDIS_URL;
+    } else {
+      process.env.REDIS_URL = previousRedisUrl;
+    }
+
+    if (previousKey === undefined) {
+      delete process.env.INTERNAL_API_KEY;
+    } else {
+      process.env.INTERNAL_API_KEY = previousKey;
+    }
+  }
+});
+
+test('POST /api/v1/news/internal/enqueue requires internal API key when configured', async () => {
+  const previousKey = process.env.INTERNAL_API_KEY;
+  process.env.INTERNAL_API_KEY = 'test_internal_key';
+
+  try {
+    const response = await request(app)
+      .post('/api/v1/news/internal/enqueue')
+      .send({ locale: 'en', limit: 1 });
+
+    assert.equal(response.statusCode, 401);
+    assert.equal(response.body.success, false);
+  } finally {
+    if (previousKey === undefined) {
+      delete process.env.INTERNAL_API_KEY;
+    } else {
+      process.env.INTERNAL_API_KEY = previousKey;
+    }
+  }
+});
