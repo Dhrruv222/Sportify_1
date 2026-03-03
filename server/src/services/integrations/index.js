@@ -8,6 +8,4 @@ module.exports = {
   sendEmail,
   fetchNewsFeed,
   computeScoutScoreFromAI,
-  fetchNewsFeed,
-  computeScoutScoreFromAI,
 };

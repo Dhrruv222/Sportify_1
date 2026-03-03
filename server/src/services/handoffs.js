@@ -1,4 +1,3 @@
-const { getPresignedUploadUrl: getUploadUrlFromMedia, sendEmail: sendEmailFromProvider } = require('./integrations');
 const {
   getPresignedUploadUrl: getUploadUrlFromMedia,
   sendEmail: sendEmailFromProvider,
