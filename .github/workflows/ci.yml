@@ -60,3 +60,6 @@ jobs:
 
       - name: Validate ai-service syntax
         run: python -m py_compile ai-service/main.py
+
+      - name: Test ai-service
+        run: python -m pytest ai-service/tests -q
