@@ -82,10 +82,14 @@ Monorepo for Sportify MVP with web (`client`), backend (`server`), mobile (`mobi
 
 ## In Progress / Next Roadmap Focus (Dev 2)
 
-1. Expand operational runbook and release checklist for staging handoff.
-2. Add endpoint-level failure matrix and examples for queue + AI fallback paths.
-3. Continue infra readiness tasks that do not require AWS/Stripe/Firebase rollout.
-4. Keep backend quality gates green while integrating parallel Dev1 merges.
+1. Continue infra readiness tasks that do not require AWS/Stripe/Firebase rollout.
+2. Keep backend quality gates green while integrating parallel Dev1 merges.
+3. Expand deployment playbook from staging to production handoff.
+
+### Dev 2 Ops Docs
+- Runbook: `server/docs/dev2-operations-runbook.md`
+- Failure Matrix: `server/docs/dev2-failure-matrix.md`
+- Release Checklist: `server/docs/dev2-release-checklist.md`
 
 ---
 
