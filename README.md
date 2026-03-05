@@ -90,6 +90,10 @@ Monorepo for Sportify MVP with web (`client`), backend (`server`), mobile (`mobi
 - Runbook: `server/docs/dev2-operations-runbook.md`
 - Failure Matrix: `server/docs/dev2-failure-matrix.md`
 - Release Checklist: `server/docs/dev2-release-checklist.md`
+- Deployment Playbook: `server/docs/dev2-deployment-playbook.md`
+
+### Dev 2 Smoke Command
+- `npm run ops:readiness-smoke -- --base-url http://localhost:3000`
 
 ---
 
