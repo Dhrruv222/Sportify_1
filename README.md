@@ -4,6 +4,15 @@ Monorepo for Sportify MVP with web (`client`), backend (`server`), mobile (`mobi
 
 ## Current Implementation Status (Done)
 
+### Dev 2 Progress Snapshot (Latest)
+- FIT-Pass module implemented (`plans`, `subscribe`, `me/qr`, `checkin`) with tests.
+- Company HR module implemented (`employees` list/add/remove, `stats`) with tests.
+- News module implemented with internal ingest, queue enqueue, queue status/retry, and scheduler tests.
+- AI scoring integrated (`server` -> `ai-service`) with fallback behavior and tests.
+- Startup environment guardrails added (`server/src/config/env.js`) and validated in tests.
+- Health checks expanded with readiness endpoint (`/api/health/ready`).
+- CI extended to include `ai-service` syntax + tests.
+
 ### 1) Environment & Tooling
 - Flutter installed and configured globally on Windows.
 - `flutter doctor -v` completed with no issues.
@@ -73,13 +82,10 @@ Monorepo for Sportify MVP with web (`client`), backend (`server`), mobile (`mobi
 
 ## In Progress / Next Roadmap Focus (Dev 2)
 
-1. Finalize all 6 Dev 2 handoff functions with exact signatures and stable mock responses.
-2. Expand Prisma schema to full roadmap table sequence and migration plan.
-3. Implement FIT-Pass module (plans, subscribe, QR generation/check-in).
-4. Build Company HR module endpoints.
-5. Implement AI scoring endpoint in FastAPI and integrate from server.
-6. Add news ingestion pipeline (BullMQ + scraper + locale feed query).
-7. Set up CI/CD + staging infra checks (Railway/Sentry/Redis/S3).
+1. Expand operational runbook and release checklist for staging handoff.
+2. Add endpoint-level failure matrix and examples for queue + AI fallback paths.
+3. Continue infra readiness tasks that do not require AWS/Stripe/Firebase rollout.
+4. Keep backend quality gates green while integrating parallel Dev1 merges.
 
 ---
 
