@@ -2,25 +2,27 @@ const { prisma } = require('../../lib/prisma');
 const { fetchNewsFeed } = require('../../services/integrations');
 
 async function listNews({ locale, page, limit }) {
+  const normalizedPage = Number.isInteger(page) ? page : Number(page) || 1;
+  const normalizedLimit = Number.isInteger(limit) ? limit : Number(limit) || 20;
   const where = {
     isPublished: true,
     ...(locale ? { locale } : {}),
   };
-  const skip = (page - 1) * limit;
+  const skip = (normalizedPage - 1) * normalizedLimit;
 
   const [items, total] = await Promise.all([
     prisma.newsArticle.findMany({
       where,
       orderBy: { publishedAt: 'desc' },
       skip,
-      take: limit,
+      take: normalizedLimit,
     }),
     prisma.newsArticle.count({ where }),
   ]);
 
   return {
     items,
-    pagination: { page, limit, total },
+    pagination: { page: normalizedPage, limit: normalizedLimit, total },
   };
 }
 

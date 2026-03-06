@@ -20,7 +20,9 @@ async function getCompanyByOwnerUserId(ownerUserId) {
 
 async function listEmployees({ ownerUserId, page, limit }) {
   const company = await getCompanyByOwnerUserId(ownerUserId);
-  const skip = (page - 1) * limit;
+  const normalizedPage = Number.isInteger(page) ? page : Number(page) || 1;
+  const normalizedLimit = Number.isInteger(limit) ? limit : Number(limit) || 20;
+  const skip = (normalizedPage - 1) * normalizedLimit;
 
   const [rows, total] = await Promise.all([
     prisma.companyEmployee.findMany({
@@ -35,14 +37,14 @@ async function listEmployees({ ownerUserId, page, limit }) {
       },
       orderBy: { createdAt: 'desc' },
       skip,
-      take: limit,
+      take: normalizedLimit,
     }),
     prisma.companyEmployee.count({ where: { companyId: company.id } }),
   ]);
 
   return {
     items: rows,
-    pagination: { page, limit, total },
+    pagination: { page: normalizedPage, limit: normalizedLimit, total },
   };
 }
 
