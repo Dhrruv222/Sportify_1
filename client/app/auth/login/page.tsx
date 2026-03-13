@@ -57,25 +57,25 @@ export default function LoginPage() {
   });
 
   return (
-    <div className="min-h-screen bg-zinc-50 p-6 md:p-10">
-      <main className="mx-auto w-full max-w-md rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-zinc-900">Login</h1>
-          <Link href="/" className="text-sm text-zinc-600 hover:text-zinc-900">
-            Back
-          </Link>
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10">
+      <main className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-950 p-6 md:p-8">
+        <div className="mb-6 text-center">
+          <p className="text-sm font-medium text-slate-400">ScoutMarket</p>
+          <h1 className="mt-2 text-3xl font-semibold text-white">Welcome back</h1>
+          <p className="mt-1 text-sm text-slate-400">Log in to continue to your scouting dashboard.</p>
         </div>
 
         <form className="space-y-4" onSubmit={form.handleSubmit((values) => mutation.mutate(values))}>
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-700">
+            <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-200">
               Email
             </label>
             <input
               id="email"
               type="email"
               {...form.register("email")}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+              className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-sky-500"
+              aria-label="Email address"
             />
             {form.formState.errors.email && (
               <p className="mt-1 text-xs text-red-600">{form.formState.errors.email.message}</p>
@@ -83,14 +83,15 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-zinc-700">
+            <label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-200">
               Password
             </label>
             <input
               id="password"
               type="password"
               {...form.register("password")}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+              className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-sky-500"
+              aria-label="Password"
             />
             {form.formState.errors.password && (
               <p className="mt-1 text-xs text-red-600">{form.formState.errors.password.message}</p>
@@ -106,11 +107,24 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {mutation.isPending ? "Signing in..." : "Sign in"}
           </button>
+
+          <p className="text-center text-sm text-slate-400">
+            Need an account?{" "}
+            <Link href="/auth/register" className="font-medium text-slate-100 underline">
+              Create one
+            </Link>
+          </p>
         </form>
+
+        <div className="mt-4 text-center">
+          <Link href="/" className="text-xs text-slate-500 hover:text-slate-300">
+            Back to dashboard
+          </Link>
+        </div>
       </main>
     </div>
   );

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AuthRequired } from "../../components/auth-required";
 import { LoadingSession } from "../../components/loading-session";
-import { PageHeader } from "../../components/page-header";
+import { ScoutShell } from "../../components/scout-shell";
 import { apiClient } from "../../lib/api-client";
 import { useAuth } from "../../lib/auth-context";
 
@@ -115,22 +115,20 @@ export default function NetworkPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 p-6 md:p-10">
-      <main className="mx-auto flex w-full max-w-5xl flex-col gap-6">
-        <PageHeader title="Network" />
-
-        <form className="grid gap-3 rounded-xl border border-zinc-200 bg-white p-4 md:grid-cols-3">
+    <ScoutShell title="Network" subtitle="Manage your following and followers.">
+        <form className="grid gap-3 rounded-2xl border border-slate-800 bg-slate-900 p-4 md:grid-cols-3">
           <input
             {...form.register("targetUserId")}
             placeholder="Target user id"
-            className="md:col-span-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+            className="md:col-span-2 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none focus:border-sky-500"
+            aria-label="Target user id"
           />
           <div className="flex gap-2">
             <button
               type="button"
               onClick={form.handleSubmit((values) => followMutation.mutate(values))}
               disabled={followMutation.isPending}
-              className="w-full rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-60"
+              className="w-full rounded-xl bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:opacity-60"
             >
               {followMutation.isPending ? "Following..." : "Follow"}
             </button>
@@ -138,7 +136,7 @@ export default function NetworkPage() {
               type="button"
               onClick={form.handleSubmit((values) => unfollowMutation.mutate(values))}
               disabled={unfollowMutation.isPending}
-              className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-800 hover:bg-zinc-100 disabled:opacity-60"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-sm font-medium text-slate-200 hover:bg-slate-800 disabled:opacity-60"
             >
               {unfollowMutation.isPending ? "Unfollowing..." : "Unfollow"}
             </button>
@@ -155,48 +153,47 @@ export default function NetworkPage() {
           )}
         </form>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <section className="rounded-xl border border-zinc-200 bg-white p-4">
-            <h2 className="mb-3 text-sm font-semibold text-zinc-800">Followers</h2>
-            {followersQuery.isLoading && <p className="text-sm text-zinc-600">Loading followers...</p>}
-            {followersQuery.isError && <p className="text-sm text-red-600">Could not fetch followers.</p>}
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <section className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
+            <h2 className="mb-3 text-sm font-semibold text-slate-200">Followers</h2>
+            {followersQuery.isLoading && <p className="text-sm text-slate-400">Loading followers...</p>}
+            {followersQuery.isError && <p className="text-sm text-red-400">Could not fetch followers.</p>}
             {!followersQuery.isLoading && !followersQuery.isError && (
               <div className="space-y-2">
                 {followersQuery.data?.length ? (
                   followersQuery.data.map((user) => (
-                    <div key={user.id} className="rounded-lg border border-zinc-200 p-3">
-                      <p className="text-sm font-medium text-zinc-900">{user.email}</p>
-                      <p className="text-xs text-zinc-500">{user.role}</p>
+                    <div key={user.id} className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+                      <p className="text-sm font-medium text-slate-100">{user.email}</p>
+                      <p className="text-xs text-slate-400">{user.role}</p>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-zinc-600">No followers yet.</p>
+                  <p className="text-sm text-slate-400">No followers yet.</p>
                 )}
               </div>
             )}
           </section>
 
-          <section className="rounded-xl border border-zinc-200 bg-white p-4">
-            <h2 className="mb-3 text-sm font-semibold text-zinc-800">Following</h2>
-            {followingQuery.isLoading && <p className="text-sm text-zinc-600">Loading following...</p>}
-            {followingQuery.isError && <p className="text-sm text-red-600">Could not fetch following list.</p>}
+          <section className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
+            <h2 className="mb-3 text-sm font-semibold text-slate-200">Following</h2>
+            {followingQuery.isLoading && <p className="text-sm text-slate-400">Loading following...</p>}
+            {followingQuery.isError && <p className="text-sm text-red-400">Could not fetch following list.</p>}
             {!followingQuery.isLoading && !followingQuery.isError && (
               <div className="space-y-2">
                 {followingQuery.data?.length ? (
                   followingQuery.data.map((user) => (
-                    <div key={user.id} className="rounded-lg border border-zinc-200 p-3">
-                      <p className="text-sm font-medium text-zinc-900">{user.email}</p>
-                      <p className="text-xs text-zinc-500">{user.role}</p>
+                    <div key={user.id} className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+                      <p className="text-sm font-medium text-slate-100">{user.email}</p>
+                      <p className="text-xs text-slate-400">{user.role}</p>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-zinc-600">Not following anyone yet.</p>
+                  <p className="text-sm text-slate-400">Not following anyone yet.</p>
                 )}
               </div>
             )}
           </section>
         </div>
-      </main>
-    </div>
+    </ScoutShell>
   );
 }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AuthRequired } from "../../components/auth-required";
 import { LoadingSession } from "../../components/loading-session";
-import { PageHeader } from "../../components/page-header";
+import { ScoutShell } from "../../components/scout-shell";
 import { useAuth } from "../../lib/auth-context";
 
 type DraftMessage = {
@@ -44,29 +44,26 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 p-6 md:p-10">
-      <main className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-        <PageHeader title="Messages" />
-
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+    <ScoutShell title="Messages" subtitle="Direct messages and conversation history.">
+        <section className="rounded-2xl border border-amber-900/40 bg-amber-900/10 p-4 text-sm text-amber-200">
           Messaging backend endpoints are not yet exposed in the current monolith route map.
           This page provides an MVP UI scaffold and local draft state only.
         </section>
 
-        <section className="rounded-xl border border-zinc-200 bg-white p-4">
-          <h2 className="mb-2 text-sm font-semibold text-zinc-800">Conversation (UI scaffold)</h2>
+        <section className="mt-4 rounded-2xl border border-slate-800 bg-slate-900 p-4">
+          <h2 className="mb-2 text-sm font-semibold text-slate-200">Conversation (UI scaffold)</h2>
           <div className="mb-3 space-y-2">
             {draftMessages.length ? (
               draftMessages.map((message) => (
-                <div key={message.id} className="rounded-lg border border-zinc-200 p-3">
-                  <p className="text-sm text-zinc-900">{message.text}</p>
-                  <p className="mt-1 text-xs text-zinc-500">
+                <div key={message.id} className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+                  <p className="text-sm text-slate-100">{message.text}</p>
+                  <p className="mt-1 text-xs text-slate-400">
                     {message.fromSelf ? "You" : "Peer"} · {new Date(message.createdAt).toLocaleTimeString()}
                   </p>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-zinc-600">No messages yet.</p>
+              <p className="text-sm text-slate-400">No messages yet.</p>
             )}
           </div>
 
@@ -75,18 +72,18 @@ export default function MessagesPage() {
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder="Type a message..."
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none focus:border-sky-500"
+              aria-label="Message input"
             />
             <button
               type="button"
               onClick={sendDraftMessage}
-              className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700"
+              className="rounded-xl bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500"
             >
               Send
             </button>
           </div>
         </section>
-      </main>
-    </div>
+    </ScoutShell>
   );
 }

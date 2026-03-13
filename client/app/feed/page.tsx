@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { AuthRequired } from "../../components/auth-required";
 import { LoadingSession } from "../../components/loading-session";
-import { PageHeader } from "../../components/page-header";
+import { ScoutShell } from "../../components/scout-shell";
 import { apiClient } from "../../lib/api-client";
 import { useAuth } from "../../lib/auth-context";
 
@@ -74,16 +74,14 @@ export default function FeedPage() {
   const items = query.data?.pages.flatMap((page) => page.data) ?? [];
 
   return (
-    <div className="min-h-screen bg-zinc-50 p-6 md:p-10">
-      <main className="mx-auto flex w-full max-w-4xl flex-col gap-6">
-        <PageHeader title="Feed" />
+    <ScoutShell title="Video Feed" subtitle="Discover and review latest player clips.">
 
         <div className="flex gap-2">
           <button
             type="button"
             onClick={() => setFeedType("discover")}
-            className={`rounded-lg px-3 py-1.5 text-sm ${
-              feedType === "discover" ? "bg-zinc-900 text-white" : "bg-white text-zinc-700 border border-zinc-200"
+            className={`rounded-xl px-3 py-1.5 text-sm ${
+              feedType === "discover" ? "bg-sky-600 text-white" : "bg-slate-900 text-slate-300 border border-slate-700"
             }`}
           >
             Discover
@@ -91,8 +89,8 @@ export default function FeedPage() {
           <button
             type="button"
             onClick={() => setFeedType("following")}
-            className={`rounded-lg px-3 py-1.5 text-sm ${
-              feedType === "following" ? "bg-zinc-900 text-white" : "bg-white text-zinc-700 border border-zinc-200"
+            className={`rounded-xl px-3 py-1.5 text-sm ${
+              feedType === "following" ? "bg-sky-600 text-white" : "bg-slate-900 text-slate-300 border border-slate-700"
             }`}
           >
             Following
@@ -102,13 +100,13 @@ export default function FeedPage() {
         {query.isLoading && (
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, index) => (
-              <div key={index} className="h-28 animate-pulse rounded-xl border border-zinc-200 bg-white" />
+              <div key={index} className="h-28 animate-pulse rounded-2xl border border-slate-800 bg-slate-900" />
             ))}
           </div>
         )}
 
         {query.isError && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="rounded-2xl border border-red-900/40 bg-red-900/10 p-4 text-sm text-red-300">
             Could not load feed.
           </div>
         )}
@@ -116,10 +114,10 @@ export default function FeedPage() {
         {!query.isLoading && !query.isError && (
           <section className="space-y-3">
             {items.map((video) => (
-              <article key={video.id} className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm">
-                <h2 className="text-base font-medium text-zinc-900">{video.title}</h2>
-                <p className="mt-1 text-sm text-zinc-600">{video.description ?? "No description"}</p>
-                <div className="mt-2 flex flex-wrap gap-3 text-xs text-zinc-500">
+              <article key={video.id} className="rounded-2xl border border-slate-800 bg-slate-900 p-4 shadow-sm">
+                <h2 className="text-base font-medium text-slate-100">{video.title}</h2>
+                <p className="mt-1 text-sm text-slate-300">{video.description ?? "No description"}</p>
+                <div className="mt-2 flex flex-wrap gap-3 text-xs text-slate-400">
                   <span>
                     Player: {video.player?.firstName ?? "-"} {video.player?.lastName ?? ""}
                   </span>
@@ -130,21 +128,20 @@ export default function FeedPage() {
               </article>
             ))}
 
-            {!items.length && <p className="text-sm text-zinc-600">No feed items available.</p>}
+            {!items.length && <p className="text-sm text-slate-400">No feed items available.</p>}
 
             {query.hasNextPage && (
               <button
                 type="button"
                 onClick={() => query.fetchNextPage()}
                 disabled={query.isFetchingNextPage}
-                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-60"
+                className="rounded-xl bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:opacity-60"
               >
                 {query.isFetchingNextPage ? "Loading more..." : "Load more"}
               </button>
             )}
           </section>
         )}
-      </main>
-    </div>
+    </ScoutShell>
   );
 }

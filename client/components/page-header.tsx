@@ -15,10 +15,10 @@ export function PageHeader({
 }: Props) {
   return (
     <div className="flex items-center justify-between">
-      <h1 className="text-2xl font-semibold text-zinc-900">{title}</h1>
+      <h1 className="text-2xl font-semibold text-white">{title}</h1>
       <div className="flex items-center gap-3">
         {rightSlot}
-        <Link href={backHref} className="text-sm text-zinc-600 hover:text-zinc-900">
+        <Link href={backHref} className="text-sm text-slate-400 hover:text-white">
           {backLabel}
         </Link>
       </div>
