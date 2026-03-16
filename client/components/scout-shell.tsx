@@ -18,7 +18,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Dashboard", href: "/" },
+  { label: "Dashboard", href: "/dashboard" },
   { label: "Messages", href: "/messages" },
   { label: "Following", href: "/network" },
   { label: "Followers", href: "/network" },

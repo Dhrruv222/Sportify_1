@@ -75,7 +75,7 @@ export default function RegisterPage() {
         accessToken: response.data.accessToken,
         user: response.data.user,
       });
-      router.push("/");
+      router.push("/dashboard");
     },
   });
 
