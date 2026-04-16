@@ -49,12 +49,33 @@ const updateProfile = async (req, res) => {
             return res.status(400).json({ status: "error", message: "Rol inválido o no soportado." });
         }
 
-        // Upsert: Create if it doesn't exist, update if it does
-        const updatedProfile = await profileModel.upsert({
-            where: { userId },
-            update: profileData,
-            create: { userId, ...profileData }
-        });
+        const existingProfile = await profileModel.findUnique({ where: { userId } });
+
+        let updatedProfile;
+        if (existingProfile) {
+            updatedProfile = await profileModel.update({
+                where: { userId },
+                data: profileData,
+            });
+        } else {
+            if (!profileData || Object.keys(profileData).length === 0) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Profile payload is required to create a new profile.",
+                });
+            }
+
+            try {
+                updatedProfile = await profileModel.create({
+                    data: { userId, ...profileData },
+                });
+            } catch (createError) {
+                return res.status(400).json({
+                    status: "error",
+                    message: createError.message,
+                });
+            }
+        }
 
         res.status(200).json({ 
             status: "success", 
@@ -137,6 +158,9 @@ const updateCareerEntry = async (req, res) => {
 
         res.status(200).json({ status: "success", data: updatedCareer });
     } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ status: "error", message: "Career entry not found." });
+        }
         res.status(500).json({ status: "error", message: error.message });
     }
 };
@@ -148,6 +172,9 @@ const deleteCareerEntry = async (req, res) => {
         await prisma.careerHistory.delete({ where: { id: careerId } });
         res.status(200).json({ status: "success", message: "Entry deleted succesfully" });
     } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ status: "error", message: "Career entry not found." });
+        }
         res.status(500).json({ status: "error", message: error.message });
     }
 };
@@ -181,6 +208,9 @@ const deleteAchievement = async (req, res) => {
         await prisma.achievement.delete({ where: { id: achievementId } });
         res.status(200).json({ status: "success", message: "Achievement removed" });
     } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ status: "error", message: "Achievement not found." });
+        }
         res.status(500).json({ status: "error", message: error.message });
     }
 };

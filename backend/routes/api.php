@@ -44,8 +44,13 @@ Route::prefix('v1')->group(function () {
     // ── Fitpass ─────────────────────────────────────────
     Route::prefix('fitpass')->group(function () {
         Route::get('/plans', [FitpassController::class, 'plans']);
-        Route::post('/subscribe', [FitpassController::class, 'subscribe']);
-        Route::get('/me/qr', [FitpassController::class, 'myQr']);
+
+        // Auth-required fitpass endpoints
+        Route::middleware('role.guard')->group(function () {
+            Route::post('/subscribe', [FitpassController::class, 'subscribe']);
+            Route::get('/me/qr', [FitpassController::class, 'myQr']);
+        });
+
         Route::post('/checkin', [FitpassController::class, 'checkin']);
     });
 

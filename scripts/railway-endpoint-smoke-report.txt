@@ -1,0 +1,36 @@
+Railway Endpoint Smoke Report
+Generated: 2026-03-16T16:01:17.2874322+01:00
+Base: https://server-production-6ed3.up.railway.app
+
+
+Method Path                               Status Expected    Pass Note
+------ ----                               ------ --------    ---- ----
+GET    /api/health                           200 200         True 
+GET    /api/health/ready                     200 200,503     True 
+POST   /api/v1/auth/login                    401 400,401     True 
+POST   /api/v1/auth/register                 400 400         True 
+POST   /api/v1/auth/refresh                  401 401,403     True 
+POST   /api/v1/auth/logout                   200 200,401,403 True 
+GET    /api/v1/auth/oauth/google            SKIP 302         True Skipped to avoid external OAuth redirect flow
+GET    /api/v1/fitpass/plans                 200 200         True 
+POST   /api/v1/fitpass/subscribe             400 400,401     True 
+GET    /api/v1/fitpass/me/qr                 401 401         True 
+POST   /api/v1/fitpass/checkin               400 400         True 
+GET    /api/v1/company/employees             401 401,403     True 
+POST   /api/v1/company/employees             401 401,403,400 True 
+GET    /api/v1/company/stats                 401 401,403     True 
+GET    /api/v1/news                          200 200         True 
+POST   /api/v1/news                          400 400         True 
+GET    /api/v1/news/not-a-uuid               404 400,404     True 
+POST   /api/v1/news/internal/queue/retry     401 401         True 
+POST   /api/v1/news/internal/enqueue         401 401,400     True 
+GET    /api/v1/news/internal/queue/status    401 401         True 
+GET    /api/v1/users/account                 401 401         True 
+GET    /api/v1/profile                       401 401         True 
+GET    /api/v1/social/feed                   401 401         True 
+GET    /api/v1/players/search                401 401         True 
+GET    /api/v1/messages/conversations        401 401         True 
+
+
+
+SUMMARY: 25/25 passed, 0 failed
