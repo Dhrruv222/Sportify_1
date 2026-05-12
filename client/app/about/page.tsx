@@ -9,7 +9,6 @@ import {
   Users,
   Target,
   Zap,
-  TrendingUp,
   Shield,
   Star,
 } from "lucide-react";
@@ -143,7 +142,7 @@ export default function AboutPage() {
                   },
                   {
                     title: "Data is fragmented and inconsistent",
-                    text: "Player statistics exist across dozens of disconnected platforms with no unified identity layer. There is no single source of truth for a player&apos;s career.",
+                    text: "Player statistics exist across dozens of disconnected platforms with no unified identity layer. There is no single source of truth for a player's career.",
                   },
                   {
                     title: "Monetization is out of reach",
@@ -158,10 +157,9 @@ export default function AboutPage() {
                     <h3 className="mb-2 text-base font-bold text-white">
                       {p.title}
                     </h3>
-                    <p
-                      className="text-sm leading-relaxed text-[#6a6a6a]"
-                      dangerouslySetInnerHTML={{ __html: p.text }}
-                    />
+                    <p className="text-sm leading-relaxed text-[#6a6a6a]">
+                      {p.text}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -209,7 +207,7 @@ export default function AboutPage() {
                 icon: Dumbbell,
                 label: "Physical Layer",
                 title: "FIT-Pass Global Access",
-                text: "A subscription passport granting access to elite training academies, performance gyms, and sports-science facilities worldwide. Your football journey doesn&apos;t stop when the game ends.",
+                text: "A subscription passport granting access to elite training academies, performance gyms, and sports-science facilities worldwide. Your football journey doesn't stop when the game ends.",
               },
               {
                 icon: Coins,
@@ -233,10 +231,9 @@ export default function AboutPage() {
                   <h3 className="mb-3 text-xl font-extrabold text-white">
                     {p.title}
                   </h3>
-                  <p
-                    className="text-sm leading-relaxed text-[#b3b3b3]"
-                    dangerouslySetInnerHTML={{ __html: p.text }}
-                  />
+                  <p className="text-sm leading-relaxed text-[#b3b3b3]">
+                    {p.text}
+                  </p>
                 </div>
               </div>
             ))}

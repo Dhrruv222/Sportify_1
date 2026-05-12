@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import DashboardShell from "@/components/DashboardShell";
 import { 
   Image as ImageIcon, 
@@ -10,10 +12,31 @@ import {
   Lock, 
   Trash2, 
   Save, 
-  ChevronDown 
+  ChevronDown,
+  Loader2,
 } from "lucide-react";
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (!token) {
+      router.replace("/login");
+    } else {
+      setAuthChecked(true);
+    }
+  }, [router]);
+
+  if (!authChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-base)]">
+        <Loader2 className="h-6 w-6 animate-spin text-[var(--accent)]" />
+      </div>
+    );
+  }
+
   return (
     <DashboardShell>
       <main className="max-w-4xl mx-auto p-6 md:p-10 space-y-6">
@@ -68,7 +91,7 @@ export default function ProfilePage() {
               <label className="text-sm text-[var(--text-subdued)] font-medium">Full Name</label>
               <input 
                 type="text" 
-                defaultValue="Kevin De Bruyne"
+                defaultValue=""
                 className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#1db954]"
               />
             </div>
@@ -76,7 +99,7 @@ export default function ProfilePage() {
               <label className="text-sm text-[var(--text-subdued)] font-medium">Email Address</label>
               <input 
                 type="email" 
-                defaultValue="k.debruyne@mancity.com"
+                defaultValue=""
                 className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#1db954]"
               />
             </div>
@@ -94,7 +117,7 @@ export default function ProfilePage() {
               <label className="text-sm text-[var(--text-subdued)] font-medium">Date of Birth</label>
               <input 
                 type="date" 
-                defaultValue="1991-06-28"
+                defaultValue=""
                 className="w-full bg-[#121212] border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#1db954]"
               />
             </div>
@@ -102,7 +125,7 @@ export default function ProfilePage() {
               <label className="text-sm text-[var(--text-subdued)] font-medium">Current Club</label>
               <input 
                 type="text" 
-                defaultValue="Manchester City"
+                defaultValue=""
                 className="w-full bg-[#121212] border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#1db954]"
               />
             </div>
@@ -110,7 +133,7 @@ export default function ProfilePage() {
               <label className="text-sm text-[var(--text-subdued)] font-medium">Location (City, Country)</label>
               <input 
                 type="text" 
-                defaultValue="Manchester, England"
+                defaultValue=""
                 className="w-full bg-[#121212] border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#1db954]"
               />
             </div>
@@ -144,7 +167,7 @@ export default function ProfilePage() {
               <label className="text-sm text-[var(--text-subdued)] font-medium">Height (cm)</label>
               <input 
                 type="number" 
-                defaultValue="181"
+                defaultValue=""
                 className="w-full bg-[#121212] border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#1db954]"
               />
             </div>
@@ -152,7 +175,7 @@ export default function ProfilePage() {
               <label className="text-sm text-[var(--text-subdued)] font-medium">Weight (kg)</label>
               <input 
                 type="number" 
-                defaultValue="70"
+                defaultValue=""
                 className="w-full bg-[#121212] border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#1db954]"
               />
             </div>
@@ -206,7 +229,7 @@ export default function ProfilePage() {
                   <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=200&h=150&auto=format&fit=crop" className="w-full h-full object-cover opacity-60" alt="thumbnail" />
                 </div>
                 <div>
-                  <h4 className="text-white text-sm font-medium">De Bruyne's 2 ASSISTS leads Man City to FINAL</h4>
+                  <h4 className="text-white text-sm font-medium">Match Highlights</h4>
                   <p className="text-[11px] text-[var(--text-subdued)] mt-1">2/10/2026</p>
                 </div>
               </div>

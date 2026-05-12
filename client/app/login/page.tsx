@@ -48,7 +48,7 @@ export default function LoginPage() {
     setMounted(true);
     // Redirect if already logged in
     if (typeof window !== "undefined" && localStorage.getItem("token")) {
-      router.replace("/");
+      router.replace("/dashboard");
     }
   }, [router]);
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
 
       if (res.status === "success" && res.data?.accessToken) {
         localStorage.setItem("token", res.data.accessToken);
-        router.push("/");
+        router.push("/dashboard");
       } else {
         setError("Unexpected response from server. Please try again.");
       }

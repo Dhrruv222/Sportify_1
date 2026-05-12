@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 
 const NAV_ITEMS = [
-  { href: "/", label: "Home", icon: Home },
+  { href: "/dashboard", label: "Home", icon: Home },
   { href: "/search", label: "Search Players", icon: Search },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/profile", label: "Profile", icon: User },
-  { href: "/dashboard/club", label: "Company", icon: Building2 },
+  { href: "/club", label: "Company", icon: Building2 },
   { href: "/fitpass", label: "FIT-Pass", icon: Zap },
 ];
 
